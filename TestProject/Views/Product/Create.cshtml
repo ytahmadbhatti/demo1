@@ -1,0 +1,123 @@
+﻿<div class="page-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body">
+                    <form id="Formid">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="ProductName">Product Name:</label>
+                                    <input type="text" class="form-control" id="ProductName" name="ProductName" placeholder="Enter Product Name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="CategoryID">Sub-Category</label>
+                                    @Html.DropDownList("SubCategoryId", ViewBag.category as SelectList, "----Select Sub-Category----", new { @class = "form-control" })
+                                </div>
+                               
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="Colour">Select Colour:</label>
+                                    <select class="form-control" id="Colour" name="Colour">
+                                        <option value="Blue">Blue</option>
+                                        <option value="Black">Black</option>
+                                        <option value="Gray">Gray</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Size">Select Size:</label>
+                                    <select class="form-control" id="Size" name="Size">
+                                        <option value="Slim Fit">Slim Fit</option>
+                                        <option value="Regular Fit">Regular Fit</option>
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                       
+                        
+                        <div class="float-right mt-3">
+                            <a class="btn btn-default" onclick="window.history.back()">Back</a>
+                            <button type="button" class="btn btn-primary" onclick="SubmitForm()">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="hdnProductId" value="@ViewBag.id" />
+    </div>
+</div>
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="~/assets/js/commonscripts.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($("#hdnProductId").val() > 0) {
+                GetDetail();
+                // LoadDropDown();
+            }
+
+        });
+        
+        function SubmitForm() {
+            var data = new FormData();
+            data.append("Id", $("#hdnProductId").val());
+            data.append("ProductName", $("#ProductName").val());
+            data.append("SubCategoryId", $("#SubCategoryId").val());
+
+            data.append("Clour", $("#Colour").val());
+            data.append("Size", $("#Size").val());
+
+            if ($("#hdnProductId").val() > 0) {
+
+                PostFormMethod("/Product/UpdateProduct", data, function (response) {
+                    if (response.success) {
+                        toastr.success("Data Saved Successfully");
+                        window.location.href = "/Product/Index";
+                    }
+                })
+
+            } else {
+
+                PostFormMethod("/Product/SaveProduct", data, function (response) {
+                    if (response.success) {
+                        toastr.success("Data Saved Successfully");
+                        window.location.href = "/Product/Index";
+                    }
+                })
+
+            }
+
+        }
+
+
+        function GetDetail() {
+            var recordId = $("#hdnProductId").val();
+            $.ajax({
+                url: '/Product/GetRecord',
+                type: 'GET',
+                data: { id: recordId },
+                success: function (response) {
+                    console.log("Record retrieved:", response);
+                    if (response.success) {
+                        var Product = response.catrecord;
+                        console.log("Record Category:", Product);
+
+                        $("#ProductName").val(Product.productName);
+                        $("#SubCategoryId").val(Product.subCategoryId);
+                        $("#Clour").val(Product.clour);
+                        $("#Size").val(Product.size);
+
+                    }
+                },
+
+            });
+        }
+
+
+    </script>
+}

@@ -1,0 +1,106 @@
+﻿@model List<TestProject.ViewModel.SubCategoryVM>
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Basic Datatable</h4>
+                        <div class="float-right">
+                            <a href="~/SubCategory/Create" class="btn btn-success btn-rounded "> Add New </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="display" style="min-width: 845px" id="tblSubCategory">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Sub Category Name</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @if(@Model.Count > 0){
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td>@item.SubCategoryName</td>
+                                            <td>
+                                                <a href="/SubCategory/Edit?Id=@item.Id" class="btn btn-success">Edit</a>
+
+                                            </td>
+                                        </tr>
+                                    }
+                                    }
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //console.log("ReadyIndex")
+
+            $('#tblSubCategory').DataTable({
+                "pageLength": 10, // Default page length
+                "lengthMenu": [10, 25, 50, 100], // Options for user to choose
+            });
+        });
+
+        // function GetSubCategory() {
+        //     $.ajax({
+        //         url: '/SubCategory/GetAllSubCategory',
+        //         type:'Get',
+        //         dataType:'json',
+        //         success: OnSuccess
+
+                
+
+        //     })
+        // }
+
+        // function OnSuccess(response) {
+        //     $('#tblSubCategory').DataTable({
+        //         processing: true, // Changed to 'processing'
+        //         lengthChange: true, // Changed to 'lengthChange'
+        //         lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]], // Corrected 'lengthMenu'
+        //         filter: true, // Corrected 'filter'
+        //         sort: true, // Corrected 'sort'
+        //         paginate: true, // Corrected 'paginate'
+        //         data: response, // Use the passed 'response' data
+        //         columns: [
+        //             {
+        //                 data: "Id",
+        //                 render: function (data, type, row, meta) { // Corrected render function
+        //                     return row.Id;
+        //                     console.log("row.Id", row.Id)// Corrected to return a value
+        //                 }
+        //             },
+        //             {
+        //                 data: "Name" // Additional column examples
+        //             },
+        //             {
+        //                 data: "Description"
+        //             }
+        //         ]
+        //     });
+        // }
+
+    </script>
+}

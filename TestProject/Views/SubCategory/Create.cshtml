@@ -1,0 +1,97 @@
+﻿<div class="page-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body">
+                    <form id="Formid">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label for="CategoryID">Category</label>
+                                    @Html.DropDownList("Id", ViewBag.category as SelectList, "----Select Category----", new { @class = "form-control" })
+                                </div>
+                                
+                                <div class="col-md-5">
+                                    <label for="Name"> Name:</label>
+                                    <input type="text" class="form-control" id="SubCategoryName" name="SubCategoryName" placeholder="Enter SubCategory Name">
+                                </div>
+                            </div>
+                        </div>
+                        
+                       
+                        <div class="float-right mt-3">
+                            <a class="btn btn-default" onclick="window.history.back()">Back</a>
+                            <button type="button" class="btn btn-primary" onclick="SubmitForm()">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="hdnSubCategoryId" value="@ViewBag.SubCategory" />
+    </div>
+</div>
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="~/assets/js/commonscripts.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($("#hdnSubCategoryId").val() > 0) {
+                GetDetail();
+            }
+
+        });
+        
+        function SubmitForm() {
+            var data = new FormData();
+            data.append("Id", $("#hdnSubCategoryId").val());
+            data.append("CategoryId", $("#CategoryId").val());
+            data.append("SubCategoryName", $("#SubCategoryName").val());
+
+            if ($("#hdnSubCategoryId").val() > 0) {
+
+                PostFormMethod("/SubCategory/UpdateSubCategory", data, function (response) {
+                    if (response.success) {
+                        toastr.success("Data Saved Successfully");
+                        window.location.href = "/SubCategory/Index";
+                    }
+                })
+
+            } else {
+
+                PostFormMethod("/SubCategory/SaveSubCategory", data, function (response) {
+                    if (response.success) {
+                        toastr.success("Data Saved Successfully");
+                        window.location.href = "/SubCategory/Index";
+                    }
+                })
+
+            }
+
+        }
+
+
+        function GetDetail() {
+            var recordId = $("#hdnSubCategoryId").val();
+            $.ajax({
+                url: '/SubCategory/GetRecord',
+                type: 'GET',
+                data: { id: recordId },
+                success: function (response) {
+                    console.log("Record retrieved:", response);
+                    if (response.success) {
+                        var Product = response.catrecord;
+                        console.log(Product)
+                        $("#CategoryId").val(Product.CategoryId);
+                        $("#SubCategoryName").val(Product.subCategoryName);
+
+                    }
+                },
+
+            });
+        }
+
+
+    </script>
+}

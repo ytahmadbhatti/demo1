@@ -1,0 +1,85 @@
+﻿<div class="page-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body">
+                    <form id="Formid">
+                        <div class="form-group">
+                            <label for="CategoryName">Category Name:</label>
+                            <input type="CategoryName" class="form-control" id="CategoryName" placeholder="Enter Category Name">
+                        </div>
+
+                        <div class="float-right">
+<a class="btn btn-default" onclick="window.history.back()"> Back</a>                            
+<button type="button" class="btn btn-primary" onclick="SubmitForm()">Save</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="hdnCategoryId" value="@ViewBag.id" />
+    </div>
+</div>
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="~/assets/js/commonscripts.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($("#hdnCategoryId").val() > 0) {
+                GetDetail();
+            }
+        });
+
+        function SubmitForm() {
+            var data = new FormData();
+            data.append("Id", $("#hdnCategoryId").val());
+            data.append("CategoryName", $("#CategoryName").val());
+
+            if ($("#hdnCategoryId").val() > 0) {
+
+                PostFormMethod("/Category/UpdateCategory", data, function (response) {
+                    if (response.success) {
+                        toastr.success("Data Saved Successfully");
+                        window.location.href = "/Category/Index";
+                    }
+                })
+
+            } else {
+
+                PostFormMethod("/Category/SaveCategory", data, function (response) {
+                    if (response.success) {
+                        toastr.success("Data Saved Successfully");
+                        window.location.href = "/Category/Index";
+                    }
+                })
+
+            }
+
+        }
+
+
+        function GetDetail() {
+            var recordId = $("#hdnCategoryId").val();
+            $.ajax({
+                url: '/Category/GetRecord',
+                type: 'GET',
+                data: { id: recordId },
+                success: function (response) {
+                    console.log("Record retrieved:", response);
+                    if (response.success) {
+                        var Category = response.catrecord;
+                        console.log("Record Category:", Category);
+
+                        $("#CategoryName").val(Category.categoryName);
+                    }
+                },
+
+            });
+        }
+
+
+    </script>
+}

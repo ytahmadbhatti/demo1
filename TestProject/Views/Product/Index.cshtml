@@ -1,0 +1,70 @@
+﻿@model IEnumerable<TestProject.Models.Products>
+<div class="page-content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Basic Datatable</h4>
+                        <div class="float-right">
+                            <a href="~/Product/Create" class="btn btn-success btn-rounded "> Add New </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="display" style="min-width: 845px" id="tblProducts">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Product Name</th>
+                                         <th>Colour</th>
+                                        <th>Size</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                  
+                                        @if(Model != null){
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.Id</td>
+                                                <td>@item.ProductName</td>
+                                                <td>@item.Clour</td>
+                                                <td>@item.Size</td>
+                                                <td>
+                                                    <a href="/Product/Edit?Id=@item.Id" class="btn btn-success">Edit</a>
+
+                                                </td>
+                                            </tr>
+                                        }
+                                        }
+                                    
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //console.log("ReadyIndex")
+
+            $('#tblProducts').DataTable();
+        });
+    </script>
+}
