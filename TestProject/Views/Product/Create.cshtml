@@ -29,6 +29,7 @@
                                 <div class="col-md-6">
                                     <label for="Size">Select Size:</label>
                                     <select class="form-control" id="Size" name="Size">
+                                        <option value=""></option>
                                         <option value="Slim Fit">Slim Fit</option>
                                         <option value="Regular Fit">Regular Fit</option>
                                     </select>
@@ -68,7 +69,6 @@
             data.append("Id", $("#hdnProductId").val());
             data.append("ProductName", $("#ProductName").val());
             data.append("SubCategoryId", $("#SubCategoryId").val());
-
             data.append("Clour", $("#Colour").val());
             data.append("Size", $("#Size").val());
 

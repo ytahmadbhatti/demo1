@@ -12,19 +12,22 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
         // Register types with Autofac
-        containerBuilder.RegisterType<CategoryDAL>().As<ICategoryRepository>().SingleInstance();
-        containerBuilder.RegisterType<ProductsDAL>().As<IProductRepository>().SingleInstance();
-        containerBuilder.RegisterType<SubCategoryDAL>().As<ISubCategoryRepository>().SingleInstance();
+        containerBuilder.RegisterType<MyAppDbContext>().InstancePerLifetimeScope(); 
+        containerBuilder.RegisterType<CategoryDAL>().As<ICategoryRepository>().InstancePerLifetimeScope();
+        containerBuilder.RegisterType<ProductsDAL>().As<IProductRepository>().InstancePerLifetimeScope();
+        containerBuilder.RegisterType<SubCategoryDAL>().As<ISubCategoryRepository>().InstancePerLifetimeScope();
+        containerBuilder.RegisterType<SaleDAL>().As<ISaleRepository>().InstancePerLifetimeScope();
 
     });
 
 // Add services to the DI container
+builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MyAppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
-builder.Services.AddControllersWithViews();
+
 
 // Build the app and configure the middleware pipeline
 var app = builder.Build();

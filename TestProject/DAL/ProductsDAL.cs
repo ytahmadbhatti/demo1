@@ -51,7 +51,6 @@ namespace TestProject.DAL
                 var product = new Products();
                 product.ProductName = obj.ProductName;
                 product.SubCategoryId = obj.SubCategoryId;
-
                 product.Clour = obj.Clour;
                 product.Size = obj.Size;
                 _db.Products.Add(product);

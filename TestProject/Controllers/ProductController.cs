@@ -28,7 +28,19 @@ namespace TestProject.Controllers
             }
         }
 
-        
+        public IActionResult GetAllProducts()  //CRETED BY AHMAD
+        {
+            try
+            {
+                var productList = _product.ProductsList();
+                return Json(productList);
+            }
+            catch (Exception)
+            {
+                return View();
+
+            }
+        }
         public IActionResult Create()
         {
             var catList = _product.SubCategoryList();
@@ -36,7 +48,7 @@ namespace TestProject.Controllers
             return View();
         }
 
-        public IActionResult Edit(int Id)   //ID to Id by Ahmad
+        public IActionResult Edit(int Id)   
         {
             var catList = _product.SubCategoryList();
             ViewBag.category = new SelectList(catList, "Id", "SubCategoryName");

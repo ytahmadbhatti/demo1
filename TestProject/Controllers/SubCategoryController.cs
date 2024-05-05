@@ -49,7 +49,7 @@ namespace TestProject.Controllers
             return View();
         }
 
-        public IActionResult Edit(int Id)   //ID to Id by Ahmad
+        public IActionResult Edit(int Id)   
         {
             var catList = _subcategory.CategoryList();
             ViewBag.category = new SelectList(catList, "Id", "CategoryName");

@@ -6,47 +6,51 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Basic Datatable</h4>
+                        <h4 class="card-title">Product-List</h4>
                         <div class="float-right">
                             <a href="~/Product/Create" class="btn btn-success btn-rounded "> Add New </a>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="display" style="min-width: 845px" id="tblProducts">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Product Name</th>
-                                         <th>Colour</th>
-                                        <th>Size</th>
-                                        <th>Action</th>
+                  
+                        <div class="bootstrap-data-table-panel">
+                            <div class="table-responsive">
+                                 <table  class="display table table-borderd table-hover"  id="tblProducts">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Product Name</th>
+                                            <th>Colour</th>
+                                            <th>Size</th>
+                                            <th>Action</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-sm">
 
-                                  
-                                        @if(Model != null){
-                                        @foreach (var item in Model)
+
+                                        @if (Model != null)
                                         {
-                                            <tr>
-                                                <td>@item.Id</td>
-                                                <td>@item.ProductName</td>
-                                                <td>@item.Clour</td>
-                                                <td>@item.Size</td>
-                                                <td>
-                                                    <a href="/Product/Edit?Id=@item.Id" class="btn btn-success">Edit</a>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@item.Id</td>
+                                                    <td>@item.ProductName</td>
+                                                    <td>@item.Clour</td>
+                                                    <td>@item.Size</td>
+                                                    <td>
+                                                        <a href="/Product/Edit?Id=@item.Id" class="btn btn-success">Edit</a>
 
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
-                                        }
-                                    
 
-                                </tbody>
 
-                            </table>
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -46,7 +46,7 @@
         function SubmitForm() {
             var data = new FormData();
             data.append("Id", $("#hdnSubCategoryId").val());
-            data.append("CategoryId", $("#CategoryId").val());
+            data.append("CategoryId", $("#Id").val());
             data.append("SubCategoryName", $("#SubCategoryName").val());
 
             if ($("#hdnSubCategoryId").val() > 0) {

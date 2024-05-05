@@ -1,0 +1,188 @@
+﻿@{
+    // List<Category> ListCategory = ViewData["GetAllCategory"] as List<Category>;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #categoryContainer {
+        overflow-y: auto; /* Vertical scrollbar */
+        max-height: 400px; /* Maximum height, adjust as needed */
+        padding-right: 15px; /* Compensate for scrollbar width to avoid content shifting */
+    }
+
+
+</style>
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body">
+                    <div class=" row">
+                        <div class="card">
+                            <div class="card-header mt-2">
+                                <ul id="dynamic-nav" class="list-group list-group-horizontal-lg">
+                                    <li class="list-group-item" onclick="PageLoad()">Category </li>
+                                    <li class="list-group-item" style="display:none;" id="selected-Category-Block" onclick="Subcategory($('#hdnSelectedCategoryId').val(),$('#hdnSelectedCategoryName').val())">
+                                        <i class="bi bi-arrow-right-circle" style="color: green;"></i>
+                                        <span class="spantxt" id="txtSelected-Category">abc</span>
+                                    </li>
+                                    <li class="list-group-item" style="display:none;" id="selected-Product-Block" onclick="Product($('#hdnSelectedSubCategoryId').val(),$('#hdnSelectedSubCategoryName').val())">
+                                        <i class="bi bi-arrow-right-circle" style="color: green;"></i>
+                                        <span class="spantxt" id="txtSelected-SubCategory"></span>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="card-body">
+                                <div class="row" id="categoryContainer" class="CategoryBody">
+                                </div>
+                            </div>
+                        </div>                    
+                    </div>                
+                 </div>
+            </div>
+        </div>
+        <input type="hidden" id="hdnSelectedCategoryId" />
+        <input type="hidden" id="hdnSelectedCategoryName" />
+        <input type="hidden" id="hdnSelectedSubCategoryId" />
+        <input type="hidden" id="hdnSelectedSubCategoryName" />
+    </div>
+</div>
+ 
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+   
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            PageLoad();
+
+        });
+
+        function CloseModel() {
+            $("CategoryModel").hide();
+        }
+
+
+        function PageLoad() {
+            $.ajax({
+                url: '/Sale/GetCategoryList',
+                type: 'GET',
+                data: '',
+                success: function (response) {
+                    console.log("Record retrieved:", response);
+                    if (response.success) {
+                         var products = response.catList;
+                        if (products.length > 0) {
+                            $("#categoryContainer").empty();
+                            document.getElementById('selected-Category-Block').style.display = 'None';
+                            document.getElementById('selected-Product-Block').style.display = 'None';
+
+                            for (var i = 0; i < products.length; i++) {
+                                var categoryid = products[i].id;
+                                var categoryName = products[i].categoryName;
+                                var categoryHtml = '<div class="col-md-4">';
+                                categoryHtml += '<div class="card shadow mb-4" onclick="Subcategory(' + categoryid + ', \'' + categoryName + '\')" data-category-id="' + categoryid + '">';
+                                categoryHtml += '<div class="card-body">';
+                                categoryHtml += '<p>' + categoryName + '</p>'; // Concatenate categoryName
+                                categoryHtml += '</div>';
+                                categoryHtml += '</div>';
+                                categoryHtml += '</div>';
+                                $("#categoryContainer").append(categoryHtml);
+                            }
+                        }
+
+                    }
+                },
+
+            });
+        }
+
+        function Subcategory(categoryid, categoryName) {
+           
+            console.log("categoryid", categoryid)
+            $.ajax({
+                url: '/Sale/GetSubSubCategoryListByCategoryId',
+                type: 'GET',
+                data: { SubcategoryId: categoryid },
+                success: function (response) {
+                    console.log("Record retrieved:", response);
+                    if (response.success) {
+                        var SubCategories = response.subCategoryList;
+                        $("#hdnSelectedCategoryId").val(categoryid)
+                        $("#hdnSelectedCategoryName").val(categoryName)
+
+                        $("#txtSelected-Category").text(categoryName);
+                        document.getElementById('selected-Category-Block').style.display = 'block';
+                        document.getElementById('selected-Product-Block').style.display = 'None';
+
+                        $("#categoryContainer").empty();
+                        if (SubCategories.length > 0) {
+                            
+                            for (var i = 0; i < SubCategories.length; i++) {
+                                var subcategoryid = SubCategories[i].id;
+                                var subcategoryName = SubCategories[i].subCategoryName;
+                                var subcategoryHtml = '<div class="col-md-4">';
+                                subcategoryHtml += '<div class="card shadow mb-4" onclick="Product(' + subcategoryid + ',\'' + subcategoryName + '\')" data-category-id="' + subcategoryid + '">';
+                                subcategoryHtml += '<div class="card-body">';
+                                subcategoryHtml += '<p>' + subcategoryName + '</p>'; // Concatenate subcategoryName
+                                subcategoryHtml += '</div>';
+                                subcategoryHtml += '</div>';
+                                subcategoryHtml += '</div>';
+                                $("#categoryContainer").append(subcategoryHtml);
+                            }
+                        }
+
+                    }
+                },
+
+            });
+        }
+
+        function Product(subcategorid,subCategoryName) {
+            $.ajax({
+                url: '/Sale/GetProductAgaintSubCategoryId',
+                type: 'GET',
+                data: { SubcategoryId: subcategorid },
+                success: function (response) {
+                    console.log("Record retrieved:", response);
+                    if (response.success) {
+                        var ProductList = response.productList;
+                        $("#hdnSelectedSubCategoryId").val(subcategorid)
+                        $("#hdnSelectedSubCategoryName").val(subCategoryName)
+                        $("#txtSelected-SubCategory").text(subCategoryName);
+                        document.getElementById('selected-Product-Block').style.display = 'block';
+                        console.log("ProductList", ProductList);
+                        console.log("response", response.productList)
+
+                        $("#categoryContainer").empty();
+                        if (ProductList.length > 0) {
+
+                            for (var i = 0; i < ProductList.length; i++) {
+                                var subcategoryid = ProductList[i].id;
+                                var subcategoryName = ProductList[i].productName;
+                                var productHtml = '<div class="col-md-4">';
+                                productHtml += '<div class="card shadow mb-4" onclick="Subcategory(' + subcategoryid + ')" data-category-id="' + subcategoryid + '">';
+                                productHtml += '<div class="card-header">';
+                                productHtml += '<p>' + subcategoryName + '</p>';
+                                productHtml += '</div>'; // close card-header
+                                productHtml += '<div class="card-body">';
+                                productHtml += '<p>' + ProductList[i].clour + ' - ' + ProductList[i].size + '</p>';
+                                productHtml += '</div>'; // close card-body
+                                productHtml += '</div>'; // close card
+                                productHtml += '</div>'; // close col-md-4
+                                $("#categoryContainer").append(productHtml);
+                            }
+
+                        }
+
+                    }
+                },
+
+            });
+        }
+
+    </script>
+}

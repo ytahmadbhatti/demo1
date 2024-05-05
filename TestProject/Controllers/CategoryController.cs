@@ -14,12 +14,11 @@ namespace TestProject.Controllers
         public IActionResult Index()
         {
             try
-            {
-                
+            {         
                 var catList = _catgory.CategoryList();
                 return View(catList);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return View();
 
@@ -31,7 +30,7 @@ namespace TestProject.Controllers
             return View();
         }
 
-        public IActionResult Edit(int Id)   //ID to Id by Ahmad
+        public IActionResult Edit(int Id)  
         {
             ViewBag.id = Id;
             return View("Create");

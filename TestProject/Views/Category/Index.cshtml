@@ -13,18 +13,19 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class ="display" style="min-width: 845px" id="tblCategory">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Category Name</th>
-                                        <th>Action</th>
+                        <div class="bootstrap-data-table-panel">
+                            <div class="table-responsive">
+                                <table class="display table table-borderd table-hover" id="tblCategory">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Category Name</th>
+                                            <th>Action</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                  
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-sm">
+
                                         @foreach (var item in Model)
                                         {
                                             <tr>
@@ -36,11 +37,13 @@
                                                 </td>
                                             </tr>
                                         }
-                                    
-                                </tbody>
 
-                            </table>
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
+                       
                     </div>
                 </div>
             </div>
